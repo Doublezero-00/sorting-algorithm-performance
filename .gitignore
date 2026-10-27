@@ -1,0 +1,24 @@
+# Maven build output
+target/
+
+# IDE files
+.idea/
+*.iml
+.vscode/
+.classpath
+.project
+.settings/
+nbproject/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Large datasets and recordings (do not commit)
+*.mp4
+*.mkv
+*.zip
+
+# Compiled output (plain javac build)
+out/
+sources.txt
