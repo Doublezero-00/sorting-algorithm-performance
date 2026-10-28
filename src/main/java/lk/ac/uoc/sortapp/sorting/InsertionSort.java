@@ -14,7 +14,7 @@ public class InsertionSort implements SortingAlgorithm {
         }
 
         for (int i = 1; i < data.length; i++) {
-            double key = data[i];                // the "card" we are inserting
+            double key = data[i];                
             int j = i - 1;
 
             // Shift bigger values one step to the right
