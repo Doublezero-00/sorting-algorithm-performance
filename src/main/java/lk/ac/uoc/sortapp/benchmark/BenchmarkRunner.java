@@ -4,39 +4,63 @@ import lk.ac.uoc.sortapp.sorting.SortingAlgorithm;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 public class BenchmarkRunner {
 
-    public List<BenchmarkResult> run(double[] values, List<SortingAlgorithm> algorithms) {
-        Objects.requireNonNull(values, "values must not be null");
-        Objects.requireNonNull(algorithms, "algorithms must not be null");
+    private static final int WARM_UP_SIZE = 1000;
 
-        List<BenchmarkResult> results = new ArrayList<>(algorithms.size());
+    /** Runs all algorithms and returns one result per algorithm (same order as the list). */
+    public List<BenchmarkResult> run(double[] data, List<SortingAlgorithm> algorithms) {
+        List<BenchmarkResult> results = new ArrayList<>();
+
+        if (data == null || algorithms == null) {
+            return results;
+        }
+
         for (SortingAlgorithm algorithm : algorithms) {
-            Objects.requireNonNull(algorithm, "algorithm must not be null");
-            double[] sorted = values.clone();
+            if (algorithm == null) {
+                continue;
+            }
+
+            warmUp(algorithm, data);
+
+            double[] copy = data.clone();
             long start = System.nanoTime();
-            algorithm.sort(sorted);
-            long elapsed = System.nanoTime() - start;
-            results.add(new BenchmarkResult(algorithm.getName(), elapsed, sorted));
+            algorithm.sort(copy);
+            long end = System.nanoTime();
+
+            results.add(new BenchmarkResult(algorithm.getName(), end - start, copy));
         }
         return results;
     }
 
+    /** @return the result with the shortest execution time (null if the list is empty). */
     public BenchmarkResult findBest(List<BenchmarkResult> results) {
-        Objects.requireNonNull(results, "results must not be null");
-        if (results.isEmpty()) {
-            throw new IllegalArgumentException("At least one benchmark result is required.");
+        if (results == null || results.isEmpty()) {
+            return null;
         }
 
-        BenchmarkResult best = Objects.requireNonNull(results.get(0), "result must not be null");
-        for (int i = 1; i < results.size(); i++) {
-            BenchmarkResult result = Objects.requireNonNull(results.get(i), "result must not be null");
-            if (result.getNanos() < best.getNanos()) {
+        BenchmarkResult best = null;
+        for (BenchmarkResult result : results) {
+            if (result == null) {
+                continue;
+            }
+            if (best == null || result.getNanos() < best.getNanos()) {
                 best = result;
             }
         }
         return best;
+    }
+
+    /** Runs the algorithm once on a small copy so the timed run is not penalised by start-up cost. */
+    private void warmUp(SortingAlgorithm algorithm, double[] data) {
+        if (data == null || data.length == 0) {
+            return;
+        }
+
+        int size = Math.min(data.length, WARM_UP_SIZE);
+        double[] small = new double[size];
+        System.arraycopy(data, 0, small, 0, size);
+        algorithm.sort(small);
     }
 }
