@@ -36,21 +36,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-/**
- * MEMBER 3 - The main window (GUI) of the application.
- *
- * What the user can do:
- *   1. Click "Choose CSV File..." and pick a .csv file.
- *   2. Pick a numeric column from the drop-down list.
- *   3. Click "Sort and Compare" to run all 5 algorithms.
- *   4. See the time of each algorithm and which one is the BEST (fastest).
- *
- * Swing basics used here:
- *   JFrame  = the window            JButton   = a button
- *   JLabel  = a line of text        JComboBox = a drop-down list
- *   JTable  = a table               JPanel    = a container that groups components
- *   JOptionPane = pop-up message boxes
- */
+
 public class MainFrame extends JFrame {
 
     // ---- Helper objects from the other members' packages ----
