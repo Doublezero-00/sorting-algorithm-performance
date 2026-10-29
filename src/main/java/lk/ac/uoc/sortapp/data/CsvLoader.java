@@ -137,7 +137,7 @@ public class CsvLoader {
 
     /** Some programs (e.g. Excel) put an invisible BOM character at the start of the file. */
     private String removeBom(String line) {
-        if (!line.isEmpty() && line.charAt(0) == '﻿') {
+        if (!line.isEmpty() && line.charAt(0) == '\uFEFF') {
             return line.substring(1);
         }
         return line;
